@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_receivables_control" model="ir.actions.act_window">
+            <field name="name">Receivables Control</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">list,form,graph,pivot</field>
+            <field name="domain">[('move_type', 'in', ('out_invoice', 'out_receipt')), ('state', '=', 'posted')]</field>
+            <field name="context">{'search_default_enhanced_overdue_only': 1}</field>
+        </record>
+
+        <record id="action_payables_control" model="ir.actions.act_window">
+            <field name="name">Payables Control</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">list,form,graph,pivot</field>
+            <field name="domain">[('move_type', 'in', ('in_invoice', 'in_receipt')), ('state', '=', 'posted')]</field>
+            <field name="context">{'search_default_enhanced_overdue_only': 1}</field>
+        </record>
+
+        <menuitem id="menu_enhanced_finance_root" name="Gelismis Finans" sequence="5" groups="enhanced_invoicing_accounting.group_enhanced_finance_user"/>
+        <menuitem id="menu_enhanced_finance_dashboard" name="Pano" parent="menu_enhanced_finance_root" action="action_enhanced_finance_dashboard" sequence="10" groups="enhanced_invoicing_accounting.group_enhanced_finance_user"/>
+        <menuitem id="menu_enhanced_finance_receivables" name="Alacak Kontrolu" parent="menu_enhanced_finance_root" action="action_receivables_control" sequence="20" groups="enhanced_invoicing_accounting.group_enhanced_finance_user"/>
+        <menuitem id="menu_enhanced_finance_payables" name="Borc Kontrolu" parent="menu_enhanced_finance_root" action="action_payables_control" sequence="30" groups="enhanced_invoicing_accounting.group_enhanced_finance_user"/>
+        <menuitem id="menu_enhanced_finance_followups" name="Takipler" parent="menu_enhanced_finance_root" action="action_enhanced_finance_followup" sequence="40" groups="enhanced_invoicing_accounting.group_enhanced_finance_user"/>
+        <menuitem id="menu_enhanced_finance_bank" name="Banka Mutabakati" parent="menu_enhanced_finance_root" sequence="50" groups="enhanced_invoicing_accounting.group_enhanced_finance_user"/>
+        <menuitem id="menu_enhanced_finance_bank_sessions" name="Oturumlar" parent="menu_enhanced_finance_bank" action="action_enhanced_bank_reconciliation" sequence="10" groups="enhanced_invoicing_accounting.group_enhanced_finance_user"/>
+        <menuitem id="menu_enhanced_finance_bank_lines" name="Eslesmemis Satirlar" parent="menu_enhanced_finance_bank" action="action_enhanced_bank_reconciliation_line" sequence="20" groups="enhanced_invoicing_accounting.group_enhanced_finance_user"/>
+        <menuitem id="menu_enhanced_finance_bank_import" name="CSV Ice Aktar" parent="menu_enhanced_finance_bank" action="action_enhanced_bank_import_wizard" sequence="30" groups="enhanced_invoicing_accounting.group_enhanced_finance_user"/>
+        <menuitem id="menu_enhanced_finance_budget" name="Butceler" parent="menu_enhanced_finance_root" action="action_enhanced_finance_budget" sequence="60" groups="enhanced_invoicing_accounting.group_enhanced_finance_user"/>
+        <menuitem id="menu_enhanced_finance_analytic_reports" name="Analitik Raporlar" parent="menu_enhanced_finance_root" action="action_analytic_summary_report" sequence="70" groups="enhanced_invoicing_accounting.group_enhanced_finance_user"/>
+        <menuitem id="menu_enhanced_finance_reports" name="Finansal Raporlar" parent="menu_enhanced_finance_root" sequence="80" groups="enhanced_invoicing_accounting.group_enhanced_finance_user"/>
+        <menuitem id="menu_enhanced_finance_report_partner_aging" name="Cari Yaslandirma Raporu" parent="menu_enhanced_finance_reports" action="action_partner_aging_report" sequence="10" groups="enhanced_invoicing_accounting.group_enhanced_finance_user"/>
+        <menuitem id="menu_enhanced_finance_report_overdue" name="Gecikmis Fatura Raporu" parent="menu_enhanced_finance_reports" action="action_overdue_invoice_report" sequence="20" groups="enhanced_invoicing_accounting.group_enhanced_finance_user"/>
+        <menuitem id="menu_enhanced_finance_report_budget" name="Butce Performans Raporu" parent="menu_enhanced_finance_reports" action="action_budget_performance_report" sequence="30" groups="enhanced_invoicing_accounting.group_enhanced_finance_user"/>
+        <menuitem id="menu_enhanced_finance_report_bank" name="Banka Mutabakat Durum Raporu" parent="menu_enhanced_finance_reports" action="action_bank_status_report" sequence="40" groups="enhanced_invoicing_accounting.group_enhanced_finance_user"/>
+        <menuitem id="menu_enhanced_finance_report_filter" name="Filtreli Rapor Ac" parent="menu_enhanced_finance_reports" action="action_finance_report_filter_wizard" sequence="50" groups="enhanced_invoicing_accounting.group_enhanced_finance_user"/>
+        <menuitem id="menu_enhanced_finance_configuration" name="Yapilandirma" parent="menu_enhanced_finance_root" sequence="90" groups="enhanced_invoicing_accounting.group_enhanced_finance_manager"/>
+        <menuitem id="menu_enhanced_finance_manual_followup" name="Manuel Takip" parent="menu_enhanced_finance_configuration" action="action_enhanced_finance_followup_wizard" sequence="10" groups="enhanced_invoicing_accounting.group_enhanced_finance_manager"/>
+    </data>
+</odoo>

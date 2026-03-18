@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_enhanced_finance_dashboard_form" model="ir.ui.view">
+            <field name="name">enhanced.finance.dashboard.form</field>
+            <field name="model">enhanced.finance.dashboard</field>
+            <field name="arch" type="xml">
+                <form string="Gelismis Finans Panosu" create="1" edit="1">
+                    <header>
+                        <button name="action_refresh" string="Yenile" type="object" class="oe_highlight"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="company_id"/>
+                                <field name="date_from"/>
+                            </group>
+                            <group>
+                                <field name="date_to"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                        </group>
+                        <group string="Pano">
+                            <group>
+                                <field name="total_receivable" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="total_payable" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="overdue_receivable" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="overdue_payable" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            </group>
+                            <group>
+                                <field name="draft_invoices"/>
+                                <field name="unpaid_customer_invoices"/>
+                                <field name="unpaid_vendor_bills"/>
+                                <field name="matched_bank_lines"/>
+                                <field name="unmatched_bank_lines"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_enhanced_finance_dashboard" model="ir.actions.act_window">
+            <field name="name">Pano</field>
+            <field name="res_model">enhanced.finance.dashboard</field>
+            <field name="view_mode">form</field>
+            <field name="target">current</field>
+        </record>
+    </data>
+</odoo>

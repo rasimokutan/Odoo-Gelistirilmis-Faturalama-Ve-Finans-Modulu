@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_move_form_enhanced_finance" model="ir.ui.view">
+            <field name="name">account.move.form.enhanced.finance</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@id='alerts']" position="after">
+                    <div class="alert alert-warning" role="alert" invisible="not finance_alert_message">
+                        <field name="finance_alert_message" nolabel="1" readonly="1"/>
+                    </div>
+                    <div class="alert alert-info" role="alert" invisible="not finance_budget_warning">
+                        <field name="finance_budget_warning" nolabel="1" readonly="1"/>
+                    </div>
+                </xpath>
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button name="action_open_followup_wizard" type="object" class="oe_stat_button" icon="fa-bell" groups="enhanced_invoicing_accounting.group_enhanced_finance_user" invisible="move_type not in ('out_invoice', 'out_receipt')">
+                        <field name="finance_followup_count" widget="statinfo" string="Takipler"/>
+                    </button>
+                </xpath>
+                <xpath expr="//field[@name='invoice_date_due']" position="after">
+                    <field name="finance_overdue_days" readonly="1" invisible="move_type == 'entry'"/>
+                    <field name="finance_duplicate_vendor_ref" invisible="1"/>
+                    <field name="finance_high_risk_warning" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="finance_analytic_account_id" groups="analytic.group_analytic_accounting" invisible="move_type == 'entry'"/>
+                    <field name="finance_partner_overdue_amount" widget="monetary" options="{'currency_field': 'company_currency_id'}" readonly="1" invisible="move_type == 'entry'"/>
+                    <button name="action_apply_default_analytic" string="Analitik Uygula" type="object" class="oe_link" groups="analytic.group_analytic_accounting" invisible="move_type == 'entry'"/>
+                </xpath>
+                <xpath expr="//notebook" position="inside">
+                    <page string="Gelismis Finans" name="enhanced_finance" groups="enhanced_invoicing_accounting.group_enhanced_finance_user" invisible="move_type == 'entry'">
+                        <group>
+                            <group string="Kontroller">
+                                <field name="finance_last_followup_level"/>
+                                <field name="finance_duplicate_vendor_ref"/>
+                                <field name="finance_high_risk_warning"/>
+                            </group>
+                            <group string="Butce">
+                                <field name="finance_budget_warning" nolabel="1" readonly="1"/>
+                            </group>
+                        </group>
+                        <group string="Takip Gecmisi">
+                            <field name="finance_followup_log_ids" nolabel="1">
+                                <list create="0" delete="0">
+                                    <field name="name"/>
+                                    <field name="partner_id"/>
+                                    <field name="due_date"/>
+                                    <field name="overdue_days"/>
+                                    <field name="reminder_level"/>
+                                    <field name="sent_date"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </group>
+                    </page>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']/list/field[@name='analytic_distribution']" position="after">
+                    <field name="finance_primary_analytic_account_id" optional="show" readonly="1"/>
+                    <field name="finance_primary_analytic_name" optional="show" readonly="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_move_filter_enhanced_finance" model="ir.ui.view">
+            <field name="name">account.move.search.enhanced.finance</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="arch" type="xml">
+                <filter name="late" position="after">
+                    <filter name="enhanced_overdue_only" string="Sadece Gecikmisler" domain="[('invoice_date_due', '&lt;', 'today'), ('state', '=', 'posted'), ('payment_state', 'in', ('not_paid', 'partial', 'in_payment'))]"/>
+                </filter>
+                <filter name="partner" position="after">
+                    <filter string="Vade Tarihi" name="grp_due_date" context="{'group_by': 'invoice_date_due'}"/>
+                </filter>
+            </field>
+        </record>
+    </data>
+</odoo>

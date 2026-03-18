@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="demo_enhanced_finance_budget" model="enhanced.finance.budget">
+            <field name="name">Demo Operasyon Butcesi</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="date_from">2026-01-01</field>
+            <field name="date_to">2026-12-31</field>
+            <field name="state">draft</field>
+        </record>
+    </data>
+</odoo>

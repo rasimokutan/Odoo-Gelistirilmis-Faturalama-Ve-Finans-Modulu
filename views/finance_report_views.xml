@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_partner_aging_report_list" model="ir.ui.view">
+            <field name="name">enhanced.finance.partner.aging.report.list</field>
+            <field name="model">enhanced.finance.partner.aging.report</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="partner_id"/>
+                    <field name="company_id"/>
+                    <field name="currency_id"/>
+                    <field name="total_amount"/>
+                    <field name="overdue_amount"/>
+                    <field name="bucket_0_30"/>
+                    <field name="bucket_31_60"/>
+                    <field name="bucket_61_90"/>
+                    <field name="bucket_90_plus"/>
+                    <field name="overdue_invoice_count"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_partner_aging_report_search" model="ir.ui.view">
+            <field name="name">enhanced.finance.partner.aging.report.search</field>
+            <field name="model">enhanced.finance.partner.aging.report</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="partner_id"/>
+                    <field name="company_id"/>
+                    <field name="currency_id"/>
+                    <filter string="Sadece Gecikmisler" name="overdue" domain="[('overdue_amount', '&gt;', 0)]"/>
+                    <group>
+                        <filter string="Company" name="group_company" context="{'group_by': 'company_id'}"/>
+                        <filter string="Partner" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                        <filter string="Currency" name="group_currency" context="{'group_by': 'currency_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_partner_aging_report_pivot" model="ir.ui.view">
+            <field name="name">enhanced.finance.partner.aging.report.pivot</field>
+            <field name="model">enhanced.finance.partner.aging.report</field>
+            <field name="arch" type="xml">
+                <pivot>
+                    <field name="company_id" type="row"/>
+                    <field name="partner_id" type="row"/>
+                    <field name="total_amount" type="measure"/>
+                    <field name="overdue_amount" type="measure"/>
+                    <field name="bucket_90_plus" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="view_partner_aging_report_graph" model="ir.ui.view">
+            <field name="name">enhanced.finance.partner.aging.report.graph</field>
+            <field name="model">enhanced.finance.partner.aging.report</field>
+            <field name="arch" type="xml">
+                <graph type="bar">
+                    <field name="partner_id"/>
+                    <field name="overdue_amount" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="action_partner_aging_report" model="ir.actions.act_window">
+            <field name="name">Cari Yaslandirma Raporu</field>
+            <field name="res_model">enhanced.finance.partner.aging.report</field>
+            <field name="view_mode">list,pivot,graph</field>
+            <field name="search_view_id" ref="view_partner_aging_report_search"/>
+        </record>
+
+        <record id="view_overdue_invoice_report_list" model="ir.ui.view">
+            <field name="name">enhanced.finance.overdue.invoice.report.list</field>
+            <field name="model">enhanced.finance.overdue.invoice.report</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="move_name"/>
+                    <field name="partner_id"/>
+                    <field name="company_id"/>
+                    <field name="journal_id"/>
+                    <field name="invoice_date"/>
+                    <field name="due_date"/>
+                    <field name="overdue_days"/>
+                    <field name="residual_amount"/>
+                    <field name="currency_id"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_overdue_invoice_report_search" model="ir.ui.view">
+            <field name="name">enhanced.finance.overdue.invoice.report.search</field>
+            <field name="model">enhanced.finance.overdue.invoice.report</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="partner_id"/>
+                    <field name="company_id"/>
+                    <field name="journal_id"/>
+                    <field name="currency_id"/>
+                    <filter string="Sadece Onayli Kayitlar" name="posted" domain="[('state', '=', 'posted')]"/>
+                    <group>
+                        <filter string="Partner" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                        <filter string="Journal" name="group_journal" context="{'group_by': 'journal_id'}"/>
+                        <filter string="Company" name="group_company" context="{'group_by': 'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_overdue_invoice_report_pivot" model="ir.ui.view">
+            <field name="name">enhanced.finance.overdue.invoice.report.pivot</field>
+            <field name="model">enhanced.finance.overdue.invoice.report</field>
+            <field name="arch" type="xml">
+                <pivot>
+                    <field name="company_id" type="row"/>
+                    <field name="journal_id" type="row"/>
+                    <field name="partner_id" type="col"/>
+                    <field name="residual_amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="view_overdue_invoice_report_graph" model="ir.ui.view">
+            <field name="name">enhanced.finance.overdue.invoice.report.graph</field>
+            <field name="model">enhanced.finance.overdue.invoice.report</field>
+            <field name="arch" type="xml">
+                <graph type="bar">
+                    <field name="partner_id"/>
+                    <field name="residual_amount" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="action_overdue_invoice_report" model="ir.actions.act_window">
+            <field name="name">Gecikmis Fatura Raporu</field>
+            <field name="res_model">enhanced.finance.overdue.invoice.report</field>
+            <field name="view_mode">list,pivot,graph</field>
+            <field name="search_view_id" ref="view_overdue_invoice_report_search"/>
+        </record>
+
+        <record id="view_budget_performance_report_list" model="ir.ui.view">
+            <field name="name">enhanced.finance.budget.performance.report.list</field>
+            <field name="model">enhanced.finance.budget.performance.report</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="budget_id"/>
+                    <field name="company_id"/>
+                    <field name="analytic_account_id"/>
+                    <field name="account_id"/>
+                    <field name="planned_amount"/>
+                    <field name="practical_amount"/>
+                    <field name="achievement_rate"/>
+                    <field name="state"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_budget_performance_report_search" model="ir.ui.view">
+            <field name="name">enhanced.finance.budget.performance.report.search</field>
+            <field name="model">enhanced.finance.budget.performance.report</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="budget_id"/>
+                    <field name="company_id"/>
+                    <field name="analytic_account_id"/>
+                    <field name="account_id"/>
+                    <filter string="Onayli" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                    <group>
+                        <filter string="Budget" name="group_budget" context="{'group_by': 'budget_id'}"/>
+                        <filter string="Analytic" name="group_analytic" context="{'group_by': 'analytic_account_id'}"/>
+                        <filter string="Company" name="group_company" context="{'group_by': 'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_budget_performance_report_pivot" model="ir.ui.view">
+            <field name="name">enhanced.finance.budget.performance.report.pivot</field>
+            <field name="model">enhanced.finance.budget.performance.report</field>
+            <field name="arch" type="xml">
+                <pivot>
+                    <field name="budget_id" type="row"/>
+                    <field name="analytic_account_id" type="row"/>
+                    <field name="planned_amount" type="measure"/>
+                    <field name="practical_amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="action_budget_performance_report" model="ir.actions.act_window">
+            <field name="name">Butce Performans Raporu</field>
+            <field name="res_model">enhanced.finance.budget.performance.report</field>
+            <field name="view_mode">list,pivot</field>
+            <field name="search_view_id" ref="view_budget_performance_report_search"/>
+        </record>
+
+        <record id="view_bank_status_report_list" model="ir.ui.view">
+            <field name="name">enhanced.finance.bank.status.report.list</field>
+            <field name="model">enhanced.finance.bank.status.report</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="reconciliation_id"/>
+                    <field name="date"/>
+                    <field name="description"/>
+                    <field name="reference"/>
+                    <field name="partner_id"/>
+                    <field name="journal_id"/>
+                    <field name="amount"/>
+                    <field name="state"/>
+                    <field name="exception_flag"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_bank_status_report_search" model="ir.ui.view">
+            <field name="name">enhanced.finance.bank.status.report.search</field>
+            <field name="model">enhanced.finance.bank.status.report</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="company_id"/>
+                    <field name="journal_id"/>
+                    <field name="partner_id"/>
+                    <field name="currency_id"/>
+                    <filter string="Eslesti" name="matched" domain="[('state', '=', 'matched')]"/>
+                    <filter string="Eslesmeyen" name="unmatched" domain="[('state', 'in', ('draft', 'exception'))]"/>
+                    <filter string="Istisna" name="exception" domain="[('exception_flag', '=', True)]"/>
+                    <group>
+                        <filter string="Journal" name="group_journal" context="{'group_by': 'journal_id'}"/>
+                        <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                        <filter string="Company" name="group_company" context="{'group_by': 'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_bank_status_report_pivot" model="ir.ui.view">
+            <field name="name">enhanced.finance.bank.status.report.pivot</field>
+            <field name="model">enhanced.finance.bank.status.report</field>
+            <field name="arch" type="xml">
+                <pivot>
+                    <field name="journal_id" type="row"/>
+                    <field name="state" type="col"/>
+                    <field name="amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="view_bank_status_report_graph" model="ir.ui.view">
+            <field name="name">enhanced.finance.bank.status.report.graph</field>
+            <field name="model">enhanced.finance.bank.status.report</field>
+            <field name="arch" type="xml">
+                <graph type="bar">
+                    <field name="state"/>
+                    <field name="amount" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="action_bank_status_report" model="ir.actions.act_window">
+            <field name="name">Banka Mutabakat Durum Raporu</field>
+            <field name="res_model">enhanced.finance.bank.status.report</field>
+            <field name="view_mode">list,pivot,graph</field>
+            <field name="search_view_id" ref="view_bank_status_report_search"/>
+        </record>
+
+        <record id="view_analytic_summary_report_list" model="ir.ui.view">
+            <field name="name">enhanced.finance.analytic.summary.report.list</field>
+            <field name="model">enhanced.finance.analytic.summary.report</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="date"/>
+                    <field name="company_id"/>
+                    <field name="analytic_account_id"/>
+                    <field name="general_account_id"/>
+                    <field name="partner_id"/>
+                    <field name="product_id"/>
+                    <field name="journal_id"/>
+                    <field name="amount"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_analytic_summary_report_search" model="ir.ui.view">
+            <field name="name">enhanced.finance.analytic.summary.report.search</field>
+            <field name="model">enhanced.finance.analytic.summary.report</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="date"/>
+                    <field name="company_id"/>
+                    <field name="analytic_account_id"/>
+                    <field name="partner_id"/>
+                    <field name="product_id"/>
+                    <field name="journal_id"/>
+                    <field name="currency_id"/>
+                    <group>
+                        <filter string="Analytic" name="group_analytic" context="{'group_by': 'analytic_account_id'}"/>
+                        <filter string="Partner" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                        <filter string="Product" name="group_product" context="{'group_by': 'product_id'}"/>
+                        <filter string="Journal" name="group_journal" context="{'group_by': 'journal_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_analytic_summary_report_pivot" model="ir.ui.view">
+            <field name="name">enhanced.finance.analytic.summary.report.pivot</field>
+            <field name="model">enhanced.finance.analytic.summary.report</field>
+            <field name="arch" type="xml">
+                <pivot>
+                    <field name="analytic_account_id" type="row"/>
+                    <field name="partner_id" type="row"/>
+                    <field name="product_id" type="col"/>
+                    <field name="amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="view_analytic_summary_report_graph" model="ir.ui.view">
+            <field name="name">enhanced.finance.analytic.summary.report.graph</field>
+            <field name="model">enhanced.finance.analytic.summary.report</field>
+            <field name="arch" type="xml">
+                <graph type="bar">
+                    <field name="analytic_account_id"/>
+                    <field name="amount" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="action_analytic_summary_report" model="ir.actions.act_window">
+            <field name="name">Analitik Ozet Raporu</field>
+            <field name="res_model">enhanced.finance.analytic.summary.report</field>
+            <field name="view_mode">list,pivot,graph</field>
+            <field name="search_view_id" ref="view_analytic_summary_report_search"/>
+        </record>
+
+        <record id="view_finance_report_filter_wizard_form" model="ir.ui.view">
+            <field name="name">enhanced.finance.report.filter.wizard.form</field>
+            <field name="model">enhanced.finance.report.filter.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Finansal Rapor Ac">
+                    <group>
+                        <field name="report_type"/>
+                        <field name="company_id"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="partner_id"/>
+                        <field name="journal_id"/>
+                        <field name="currency_id"/>
+                        <field name="overdue_only"/>
+                        <field name="posted_only"/>
+                    </group>
+                    <footer>
+                        <button name="action_open_report" string="Raporu Ac" type="object" class="oe_highlight"/>
+                        <button string="Iptal" special="cancel" class="btn-secondary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_finance_report_filter_wizard" model="ir.actions.act_window">
+            <field name="name">Finansal Rapor Filtreleri</field>
+            <field name="res_model">enhanced.finance.report.filter.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

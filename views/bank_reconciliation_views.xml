@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_enhanced_bank_reconciliation_list" model="ir.ui.view">
+            <field name="name">enhanced.bank.reconciliation.list</field>
+            <field name="model">enhanced.bank.reconciliation</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="journal_id"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="state"/>
+                    <field name="matched_line_count"/>
+                    <field name="unmatched_line_count"/>
+                    <field name="exception_line_count"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_enhanced_bank_reconciliation_form" model="ir.ui.view">
+            <field name="name">enhanced.bank.reconciliation.form</field>
+            <field name="model">enhanced.bank.reconciliation</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_run_auto_match" string="Otomatik Eslestir" type="object" class="oe_highlight" invisible="state == 'done'"/>
+                        <button name="action_mark_done" string="Tamamla" type="object" class="oe_highlight" groups="enhanced_invoicing_accounting.group_enhanced_finance_manager" invisible="state == 'done'"/>
+                        <button name="action_open_unmatched_lines" string="Eslesmeyenleri Goster" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,done"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" type="object" name="action_open_unmatched_lines" icon="fa-exclamation-circle">
+                                <field name="unmatched_line_count" widget="statinfo" string="Eslesmeyen"/>
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name" readonly="1"/>
+                                <field name="date"/>
+                                <field name="journal_id"/>
+                            </group>
+                            <group>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                                <field name="currency_id"/>
+                                <field name="matched_amount"/>
+                            </group>
+                        </group>
+                        <group string="Ozet">
+                            <field name="total_line_count"/>
+                            <field name="matched_line_count"/>
+                            <field name="suggested_line_count"/>
+                            <field name="exception_line_count"/>
+                        </group>
+                        <notebook>
+                            <page string="Banka Satirlari">
+                                <field name="line_ids" nolabel="1">
+                                    <list editable="bottom">
+                                        <field name="date"/>
+                                        <field name="description"/>
+                                        <field name="reference"/>
+                                        <field name="partner_id"/>
+                                        <field name="amount"/>
+                                        <field name="currency_id"/>
+                                        <field name="state"/>
+                                        <field name="suggested_move_line_id"/>
+                                        <field name="matched_move_line_id"/>
+                                        <button name="action_auto_match" type="object" string="Oner"/>
+                                        <button name="action_match" type="object" string="Eslestir"/>
+                                        <button name="action_unmatch" type="object" string="Eslestirmeyi Kaldir"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_enhanced_bank_reconciliation_line_list" model="ir.ui.view">
+            <field name="name">enhanced.bank.reconciliation.line.list</field>
+            <field name="model">enhanced.bank.reconciliation.line</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="reconciliation_id"/>
+                    <field name="date"/>
+                    <field name="description"/>
+                    <field name="reference"/>
+                    <field name="partner_id"/>
+                    <field name="amount"/>
+                    <field name="state"/>
+                    <field name="suggested_move_line_id"/>
+                    <field name="matched_move_line_id"/>
+                    <field name="exception_flag"/>
+                    <field name="exception_note"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_enhanced_bank_reconciliation_line_search" model="ir.ui.view">
+            <field name="name">enhanced.bank.reconciliation.line.search</field>
+            <field name="model">enhanced.bank.reconciliation.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="description"/>
+                    <field name="reference"/>
+                    <field name="partner_id"/>
+                    <field name="journal_id"/>
+                    <field name="company_id"/>
+                    <filter string="Eslesmeyen" name="unmatched" domain="[('state', 'in', ('draft', 'exception'))]"/>
+                    <filter string="Onerilen" name="suggested" domain="[('state', '=', 'suggested')]"/>
+                    <filter string="Eslesti" name="matched" domain="[('state', '=', 'matched')]"/>
+                    <filter string="Istisna" name="exception" domain="[('state', '=', 'exception')]"/>
+                    <group>
+                        <filter string="Company" name="group_company" context="{'group_by': 'company_id'}"/>
+                        <filter string="Journal" name="group_journal" context="{'group_by': 'journal_id'}"/>
+                        <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_enhanced_bank_import_wizard_form" model="ir.ui.view">
+            <field name="name">enhanced.bank.import.wizard.form</field>
+            <field name="model">enhanced.bank.import.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Banka CSV Ice Aktar">
+                    <group>
+                        <field name="company_id"/>
+                        <field name="journal_id"/>
+                        <field name="reconciliation_id"/>
+                        <field name="file_name"/>
+                        <field name="file_data" filename="file_name"/>
+                    </group>
+                    <footer>
+                        <button name="action_import" string="Ice Aktar" type="object" class="oe_highlight"/>
+                        <button string="Iptal" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_enhanced_bank_reconciliation" model="ir.actions.act_window">
+            <field name="name">Banka Mutabakati</field>
+            <field name="res_model">enhanced.bank.reconciliation</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <record id="action_enhanced_bank_reconciliation_line" model="ir.actions.act_window">
+            <field name="name">Banka Mutabakat Satirlari</field>
+            <field name="res_model">enhanced.bank.reconciliation.line</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_enhanced_bank_reconciliation_line_search"/>
+        </record>
+
+        <record id="action_enhanced_bank_import_wizard" model="ir.actions.act_window">
+            <field name="name">Banka CSV Ice Aktar</field>
+            <field name="res_model">enhanced.bank.import.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="mail_template_finance_followup_log" model="mail.template">
+            <field name="name">Finans Takip Kaydi Sablonu</field>
+            <field name="model_id" ref="model_enhanced_finance_followup_log"/>
+            <field name="subject">Odeme Hatirlatmasi - {{ object.invoice_id.name }}</field>
+            <field name="email_from">{{ user.email_formatted or '' }}</field>
+            <field name="body_html" type="html">
+                <div>
+                    <p>Sayin {{ object.partner_id.name }},</p>
+                    <p>{{ object.invoice_id.name }} numarali fatura icin follow-up kaydi olusturulmustur.</p>
+                    <p>Vade: {{ object.due_date }} | Gecikme: {{ object.overdue_days }} gun</p>
+                    <p>Seviye: {{ object.reminder_level }}</p>
+                </div>
+            </field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+    </data>
+</odoo>

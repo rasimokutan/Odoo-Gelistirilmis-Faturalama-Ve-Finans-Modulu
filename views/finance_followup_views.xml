@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_enhanced_finance_followup_list" model="ir.ui.view">
+            <field name="name">enhanced.finance.followup.list</field>
+            <field name="model">enhanced.finance.followup.log</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="invoice_id"/>
+                    <field name="due_date"/>
+                    <field name="overdue_days"/>
+                    <field name="reminder_level"/>
+                    <field name="sent_date"/>
+                    <field name="state"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_enhanced_finance_followup_form" model="ir.ui.view">
+            <field name="name">enhanced.finance.followup.form</field>
+            <field name="model">enhanced.finance.followup.log</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_mark_sent" string="Gonderildi Olarak Isle" type="object" class="oe_highlight" invisible="state == 'sent'"/>
+                        <button name="action_cancel" string="Iptal Et" type="object" invisible="state == 'cancelled'"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,sent,cancelled"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" readonly="1"/>
+                                <field name="partner_id"/>
+                                <field name="invoice_id"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                            <group>
+                                <field name="due_date"/>
+                                <field name="overdue_days"/>
+                                <field name="reminder_level"/>
+                                <field name="sent_date"/>
+                            </group>
+                        </group>
+                        <field name="notes"/>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_enhanced_finance_followup_search" model="ir.ui.view">
+            <field name="name">enhanced.finance.followup.search</field>
+            <field name="model">enhanced.finance.followup.log</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="partner_id"/>
+                    <field name="invoice_id"/>
+                    <field name="company_id"/>
+                    <field name="reminder_level"/>
+                    <filter string="Taslak" name="draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Gonderildi" name="sent" domain="[('state', '=', 'sent')]"/>
+                    <filter string="Son Uyari" name="final" domain="[('reminder_level', '=', 'final')]"/>
+                    <group>
+                        <filter string="Partner" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                        <filter string="Reminder Level" name="group_level" context="{'group_by': 'reminder_level'}"/>
+                        <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_enhanced_finance_followup_wizard_form" model="ir.ui.view">
+            <field name="name">enhanced.finance.followup.wizard.form</field>
+            <field name="model">enhanced.finance.followup.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Manuel Takip">
+                    <group>
+                        <field name="partner_id"/>
+                        <field name="invoice_ids" widget="many2many_tags"/>
+                        <field name="reminder_level"/>
+                        <field name="notes"/>
+                    </group>
+                    <footer>
+                        <button name="action_send_followup" string="Takip Olustur" type="object" class="oe_highlight"/>
+                        <button string="Iptal" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_enhanced_finance_followup" model="ir.actions.act_window">
+            <field name="name">Takipler</field>
+            <field name="res_model">enhanced.finance.followup.log</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_enhanced_finance_followup_search"/>
+        </record>
+
+        <record id="action_enhanced_finance_followup_wizard" model="ir.actions.act_window">
+            <field name="name">Manuel Takip</field>
+            <field name="res_model">enhanced.finance.followup.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>
