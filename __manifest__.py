@@ -3,7 +3,7 @@
     "version": "19.0.1.0.0",
     "category": "Accounting/Accounting",
     "summary": "Odoo Community icin gelismis finans ve operasyonel muhasebe",
-    "author": "OpenAI",
+    "author": "Rasim Okutan",
     "license": "LGPL-3",
     "depends": ["account", "mail", "analytic"],
     "data": [
